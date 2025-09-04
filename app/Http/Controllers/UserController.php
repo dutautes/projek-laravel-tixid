@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
+class UserController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+    public function signUp(Request $request)
+    {
+        // (Request $request) : class untuk mengambil value dari formulir
+        // validasi
+        $request->validate([
+            // 'name_input' => 'tipe validasi'
+            // required : wajib diisi, min : minimal karakter (teks)
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            // email:dns => emailnya valid, @gxmail @company.co dsb
+            'email' => 'required|email:dns',
+            'password' => 'required|min:8'
+        ],
+        [
+            // pesan custom error
+            // 'name_input.validasi' => 'person'1
+            'first_name.required' => 'Nama depan wajib diisi',
+            'first_name.min' => 'Nama depan wajib diisi minimal 3 huruf',
+            'last_name.required' => 'Nama belakang wajib diisi',
+            'last_name.min' => 'Nama belakang wajib diisi minimal 3 huruf',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Email wajib diisi dengan data yang valid',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password wajib diisi minimal 8 huruf',
+        ]);
+
+        // create() : membuat data baru
+        $createUser = User::create([
+            // 'nama_column' => $request->name_input
+            'name' => $request->first_name . " " . $request->last_name,
+            'email' => $request->email,
+            // Hash : enkripsi data (mengubah menjadi karakter acak) agar tidak ada yang bisa menebak isinya
+            'password' => Hash::make($request->password),
+            // pengguna tidak bisa memilih role (akses), jd manual ditambahkan 'user'
+            'role' => 'user'
+        ]);
+
+        if ($createUser) {
+            // redirect() : memindahkan halaman, route() : name routing yang dituju
+            // with() : mengirimkan session, biasanya untuk notifikasi
+            return redirect()->route('login')->with('success', 'Silahkan login!');
+        } else {
+            // back() : kembali ke halaman sebelumnya
+            return redirect()->back()->with('error', 'Gagal! silahkan coba lagi.');
+        }
+    }
+
+    public function loginAuth(Request $request) {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ],
+        [
+            'email.required' => 'Email harus di isi',
+            'password.required' => 'Password harus di isi',
+        ]);
+        // mengambil data yang akan di verifikasi
+        $data = $request->only(['email', 'password']);
+        //Auth:: -> clas laravel utk penanganan authentication
+        // attempt() -> method class auth untuk mencocokan email-pw atau username-pw kalau cocok akan disimpan datanya ke session auth
+        if (Auth::attempt($data)) {
+            // jika berhasil login (attempt), dicek lagi role nya
+            if (Auth::user()->role == 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Berhasil login!');
+            } else {
+                return redirect()->route('home')->with('success', 'Berhasil login!');
+            }
+            return redirect()->route('home')->with('success', 'Berhasil login!');
+        } else {
+            return redirect()->back()->with('error', 'Gagal login! pastikan email dan password sesuai');
+        }
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('home')->with('logout', 'Berhasil logout! silahkan login kembali untuk akses lengkap');
+    }
+}

@@ -60,8 +60,11 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         })->name('create');
 
         Route::post('/store', [CinemaController::class, 'store'])->name('store');
-
+        // route edit
         Route::get('/edit/{id}', [CinemaController::class, 'edit'])->name('edit');
-        Route::put('/updated/{id}', [CinemaController::class, 'update'])->name('edit');
+        // route update
+        Route::put('/update/{id}', [CinemaController::class, 'update'])->name('update');
+        // route delete
+        Route::delete('/delete/{id}', [CinemaController::class, 'destroy'])->name('delete');
     });
 });

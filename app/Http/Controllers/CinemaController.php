@@ -78,16 +78,42 @@ class CinemaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cinema $cinema)
+    public function update(Request $request, $id)
     {
-        //
+        // validasi
+        $request->validate([
+            'name' => 'required|min:3',
+            'location' => 'required|min:10',
+        ],  [
+            'name.required' => 'Nama Bioskop harus diisi',
+            'name.min' => 'Nama wajib diisi minimal 3 huruf',
+            'location.required' => 'Lokasi bioskop harus diisi',
+            'location.min' => 'Lokasi wajib diisi minimal 10 huruf'
+        ]);
+
+        // kirim data
+        $updateCinema = Cinema::where('id', $id)->update([
+            'name' => $request->name,
+            'location' => $request->location
+        ]);
+
+        if ($updateCinema) {
+            return redirect()->route('admin.cinemas.index')->with('success', 'Berhasil mengubah data bioskop!');
+        } else {
+            return redirect()->back()->with('failed', 'Gagal mengubah data bioskop!');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cinema $cinema)
+    public function destroy($id)
     {
-        //
+        $deleteData = Cinema::where('id', $id)->delete();
+        if ($deleteData) {
+            return redirect()->route('admin.cinemas.index')->with('success', 'Berhasil menghapus data bioskop!');
+        } else {
+            return redirect()->back()->with('failed', 'Gagal menghapus data bioskop!');
+        }
     }
 }

@@ -7,7 +7,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="container">
+    <div class="container mt-3">
+        @if (Session::get('failed'))
+            <div class="alert alert-danger">
+                {{ Session::get('failed') }}
+            </div>
+        @endif
         <div class="d-flex justify-content-end mb-3 mt-4">
             <a href="{{ route('admin.cinemas.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
@@ -27,8 +32,12 @@
                     <td>{{ $cinema->name }}</td>
                     <td>{{ $cinema->location }}</td>
                     <td class="d-flex justify-content-center gap-2">
-                        <a href="" class="btn btn-info">Edit</a>
-                        <button type="button" class="btn btn-danger">Hapus</button>
+                        <a href="{{ route('admin.cinemas.edit', $cinema->id) }}" class="btn btn-info">Edit</a>
+                        <form action="{{ route('admin.cinemas.delete', $cinema->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger">Hapus</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

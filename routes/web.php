@@ -50,12 +50,13 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard'); // admin dashboard
-    // bioskop
+
+    // data bioskop
     Route::prefix('/cinemas')->name('cinemas.')->group(function () {
-
+        // index (/)
         Route::get('/', [CinemaController::class, 'index'])->name('index');
-
-        Route::get('create', function () {
+        // create.blade.php
+        Route::get('/create', function () {
             return view('admin.cinema.create');
         })->name('create');
 
@@ -66,5 +67,23 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::put('/update/{id}', [CinemaController::class, 'update'])->name('update');
         // route delete
         Route::delete('/delete/{id}', [CinemaController::class, 'destroy'])->name('delete');
+    });
+
+    // data pengguna
+    Route::prefix('/staffs')->name('staffs.')->group(function () {
+        // index (/)
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        // create.blade.php
+        Route::get('/create', function () {
+            return view('admin.staff.create');
+        })->name('create');
+
+        Route::post('/store', [UserController::class, 'store'])->name('store');
+        // route edit
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        // route update
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+        // route delete
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
     });
 });

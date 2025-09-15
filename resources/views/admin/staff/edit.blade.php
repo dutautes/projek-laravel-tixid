@@ -44,7 +44,7 @@
             @enderror
             <div class="mb-3">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" value="{{ $staff['password'] }}">
+                <input type="password" class="form-control" name="password" id="password">
             </div>
             <button type="submit" class="btn btn-primary">Buat</button>
         </form>

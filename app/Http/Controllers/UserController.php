@@ -86,21 +86,17 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email:dns',
-            'password' => 'required|min:5'
         ], [
             'name.required' => 'Nama wajib di isi',
             'name.min' => 'Nama wajib diisi minimal 3 huruf',
             'email.required' => 'Email wajib diisi',
-            'email.email' => 'Email wajib diisi dengan data yang valid',
-            'password.required' => 'Password wajib diisi',
-            'password.min' => 'Password wajib diisi minimal 8 huruf',
+            'email.email' => 'Email wajib diisi dengan data yang valid'
         ]);
 
         // kirim data
         $updateData = User::where('id', $id)->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password
         ]);
 
         // update data

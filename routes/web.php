@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () { // home
@@ -78,6 +79,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
             return view('admin.staff.create');
         })->name('create');
 
+        // store
         Route::post('/store', [UserController::class, 'store'])->name('store');
         // route edit
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
@@ -85,5 +87,19 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
         // route delete
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+    });
+
+    // data movie
+    Route::prefix('/movies')->name('movies.')->group(function () {
+        // index
+        Route::get('/', [MovieController::class, 'index'])->name('index');
+        // create
+        Route::get('/create', [MovieController::class, 'create'])->name('create');
+        // store
+        Route::post('/store', [MovieController::class, 'store'])->name('store');
+        // edit
+        Route::get('/edit/{id}', [MovieController::class, 'edit'])->name('edit');
+        // update
+        Route::put('/update/{id}', [MovieController::class, 'update'])->name('update');
     });
 });

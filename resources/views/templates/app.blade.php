@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
+    {{-- CDN jquery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -49,7 +52,7 @@
                                     <a class="dropdown-item" href="{{ route('admin.cinemas.index') }}">Data Bioskop</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">Data Film</a>
+                                    <a class="dropdown-item" href="{{ route('admin.movies.index') }}">Data Film</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('admin.staffs.index') }}">Data Petugas</a>
@@ -91,11 +94,22 @@
     </nav>
     <!-- Navbar -->
 
-    {{-- mengisi konten dinamis --}}
+    {{-- menyimpan konten dinamis bagian HTML --}}
     @yield('content')
+
+    {{-- bootstrap --}}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous">
+    </script>
 
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
+
+    {{-- menyimpan konten dinamis bagian JS --}}
+    @stack('script')
 </body>
 
 </html>

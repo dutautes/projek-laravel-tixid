@@ -21,11 +21,33 @@
         </nav>
     </div>
 
-    <div class="mt-5 w-75 d-block m-auto">
-        @if (Session::get('failed'))
-            <div class="alert alert-danger">
-                {{ Session::get('failed') }}
+    {{-- form --}}
+    <div class="card my-3 p-4 w-75 mx-auto">
+        <h5 class="text-center my-3">Buat Data Promo</h5>
+        <form action="{{ route('staff.promos.update', $promo->id) }}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="mb-3">
+                <label for="discount" class="form-label">Diskon</label>
+                <input type="number" name="discount" id="discount"
+                    class="form-control @error('number') is-invalid @enderror" value="{{ $promo->discount }}">
+                @error('discount')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
-        @endif
+            <div class="mb-3">
+                <label for="type" class="form-label">Tipe Diskon</label>
+                <select class="form-select" name="type" id="type" aria-label="Default select example">
+                    <option selected value=" " hidden>Pilih Jenis Diskon</option>
+                    <option value="rupiah">Rupiah</option>
+                    <option value="percent">Persen</option>
+                </select>
+                @error('type')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <button type="submit" class="btn btn-primary">Buat</button>
+            <a href="{{ route('staff.promos.index') }}" class="btn btn-secondary">Kembali</a>
+        </form>
     </div>
 @endsection

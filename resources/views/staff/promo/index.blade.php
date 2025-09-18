@@ -14,7 +14,7 @@
         <h5>Data Promo</h5>
         <table class="table table-bordered">
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Kode Promo</th>
                 <th>Diskon</th>
                 <th>Tipe</th>

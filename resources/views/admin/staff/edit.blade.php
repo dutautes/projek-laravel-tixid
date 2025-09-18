@@ -47,6 +47,7 @@
                 <input type="password" class="form-control" name="password" id="password">
             </div>
             <button type="submit" class="btn btn-primary">Buat</button>
+            <a href="{{ route('admin.staffs.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

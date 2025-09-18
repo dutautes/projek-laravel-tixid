@@ -21,6 +21,7 @@
         </nav>
     </div>
 
+    {{-- form --}}
     <div class="card w-75 mx-auto my-3 p-4">
         <h5 class="text-center my-3">Edit Data Bioskop</h5>
         <form action="{{ route('admin.cinemas.update', $cinema->id) }}" method="post">
@@ -43,6 +44,7 @@
                 @enderror
             </div>
             <button type="submit" class="btn btn-primary">Buat</button>
+            <a href="{{ route('admin.cinemas.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

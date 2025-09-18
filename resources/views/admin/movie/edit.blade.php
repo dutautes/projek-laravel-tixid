@@ -91,6 +91,7 @@
                 </div>
             </div>
             <button type="submit" class="mt-3 btn btn-primary">Kirim</button>
+            <a href="{{ route('admin.movies.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

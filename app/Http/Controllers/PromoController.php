@@ -64,17 +64,38 @@ class PromoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Promo $promo)
+    public function edit($id)
     {
-        //
+        $promo = Promo::find($id);
+        return view('staff.promo.edit', compact('promo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Promo $promo)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'discount' => 'required',
+            'type' => 'required'
+        ], [
+            'discount.required' => 'Diskon harus diisi',
+            'type.required' => 'Tipe diskon harus diisi'
+        ]);
+        $promoCode = Str::random(8);
+
+        $updateData = Promo::where('id', $id)->update([
+            'promo_code' => $promoCode,
+            'discount' => $request->discount,
+            'type' => $request->type,
+            'activated' => 1,
+        ]);
+
+        if ($updateData) {
+            return redirect()->route('staff.promos.index')->with('success', 'Data promo berhasil ditambahkan');
+        } else {
+            return redirect()->back()->with('error', 'Data promo gagal ditambahkan');
+        }
     }
 
     /**

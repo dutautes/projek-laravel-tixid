@@ -42,6 +42,7 @@
                 @enderror
             </div>
             <button type="submit" class="btn btn-primary">Buat</button>
+            <a href="{{ route('admin.cinemas.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

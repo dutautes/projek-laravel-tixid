@@ -1,7 +1,28 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="w-75 mx-auto my-5">
+    {{-- breadcrumbs --}}
+    <div class="mt-5 w-75 d-block m-auto">
+        @if (Session::get('failed'))
+            <div class="alert alert-danger">
+                {{ Session::get('failed') }}
+            </div>
+        @endif
+        <nav data-mdb-navbar-init class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.movies.index') }}">Movie</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.movies.index') }}">Data</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="#">Tambah</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </nav>
+    </div>
+
+    <div class="card w-75 mx-auto my-3 p-4">
+        <h5 class="text-center my-3">Buat Data Movie</h5>
         <form action="{{ route('admin.movies.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row mb-3">

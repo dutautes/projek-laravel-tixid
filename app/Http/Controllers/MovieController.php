@@ -169,7 +169,20 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $movie = Movie::find($id);
+        if ($movie && $movie->poster) {
+            $filePath = storage_path('/app/public/' . $movie['poster']);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
+        $deleteDataFilm = Movie::where('id', $id)->delete();
+        if ($deleteDataFilm) {
+            return redirect()->route('admin.movies.index')->with('success', 'Berhasil menghapus data film!');
+        } else {
+            return redirect()->back()->with('failed', 'Gagal menghapus data film!');
+        }
     }
 
     public function home()

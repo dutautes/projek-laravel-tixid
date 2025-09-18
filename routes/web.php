@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\PromoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () { // home
@@ -109,5 +110,29 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::get('/non-activated/{id}', [MovieController::class, 'nonActivated'])->name('non-activated');
         // delete
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
+    });
+});
+
+// middleware staff
+Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('staff.dashboard');
+    })->name('dashboard');
+
+    Route::prefix('/promo')->name('promos.')->group(function () {
+        // index
+        Route::get('/', [PromoController::class, 'index'])->name('index');
+        // create
+        Route::get('/create', [PromoController::class, 'create'])->name('create');
+        // store
+        Route::post('/store', [PromoController::class, 'store'])->name('store');
+        // route edit
+        Route::get('/edit/{id}', [PromoController::class, 'edit'])->name('edit');
+        // route update
+        Route::put('/update/{id}', [PromoController::class, 'update'])->name('update');
+        // route delete
+        Route::delete('/delete/{id}', [PromoController::class, 'destroy'])->name('delete');
+        // non-activated
+        Route::get('/non-activated/{id}', [PromoController::class, 'nonActivated'])->name('non-activated');
     });
 });

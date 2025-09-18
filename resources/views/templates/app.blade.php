@@ -59,6 +59,16 @@
                                 </li>
                             </ul>
                         </li>
+                    @elseif(Auth::check() && Auth::user()->role == 'staff')
+                        <li class="nav-item">
+                            <a href="{{ route('staff.dashboard') }}" class="nav-link">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Jadwal Tiket</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('staff.promos.index') }}">Promo</a>
+                        </li>
                     @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}">Beranda</a>

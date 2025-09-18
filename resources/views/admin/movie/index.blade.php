@@ -40,7 +40,9 @@
                         {{-- onclick : menjalankan fungsi javascript ketika komponen di klik --}}
                         <button class="btn btn-secondary" onclick="showModal({{ $item }})">Detail</button>
                         <a href="{{ route('admin.movies.edit', $item['id']) }}" class="btn btn-primary">Edit</a>
-                        <form action="" method="">
+                        <form action="{{ route('admin.movies.delete', $item['id']) }}" method="post">
+                            @csrf
+                            @method('DELETE')
                             <button type="submit" class="btn btn-danger">Hapus</button>
                         </form>
                         {{-- jika activated true, munculkan opsi untuk non-aktif film --}}

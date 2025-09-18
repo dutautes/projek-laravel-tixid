@@ -33,6 +33,11 @@ Route::middleware('isGuest')->group(function () {
     Route::post('/sign-up', [UserController::class, 'signUp'])->name('sign_up.add');
 });
 
+//logout
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
+// Beranda
+Route::get('/', [MovieController::class, 'home'])->name('home');
 
 // http method Route::
 // 1. get -> menampilkan halmaman
@@ -40,7 +45,6 @@ Route::middleware('isGuest')->group(function () {
 // 3. patch/put -> mengubah data
 // 4. delete -> menghapus data
 
-Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 // prefix() : awalan, menulis /admin satu kali untuk 16 route CRUD (beberapa route)
 // name('admin.') : biar diawali dengan admin. untuk name nya. pake titik karna nanti akan digabungkan (admin.dashboard / admin.cinemas)
@@ -101,5 +105,9 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::get('/edit/{id}', [MovieController::class, 'edit'])->name('edit');
         // update
         Route::put('/update/{id}', [MovieController::class, 'update'])->name('update');
+        // non-aktif button
+        Route::get('/non-activated/{id}', [MovieController::class, 'nonActivated'])->name('non-activated');
+        // delete
+        Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
     });
 });

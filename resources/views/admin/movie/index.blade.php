@@ -5,6 +5,9 @@
         @if (Session::get('success'))
             <div class="alert alert-success">{{ Session::get('success') }}</div>
         @endif
+        @if (Session::get('error'))
+            <div class="alert alert-danger">{{ Session::get('error') }}</div>
+        @endif
         <div class="d-flex justify-content-end">
             <a href="{{ route('admin.movies.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
@@ -14,6 +17,7 @@
                 <th>#</th>
                 <th>Poster</th>
                 <th>Judul Film</th>
+                <th>Status</th>
                 <th>Aksi</th>
             </tr>
 
@@ -22,9 +26,16 @@
                     <td class="text-center">{{ $key + 1 }}</td>
                     <td>
                         {{-- memunculkan gambar yg diupload asset('storage/' . alamat) --}}
-                        <img src="{{ asset('storage/' . $item['poster']) }}" alt="{{ $item['title'] }}" width="256">
+                        <img src="{{ asset('storage/' . $item['poster']) }}" alt="{{ $item['title'] }}" width="120">
                     </td>
                     <td>{{ $item['title'] }}</td>
+                    <td>
+                        @if ($item['activated'] == 1)
+                            <span class="badge badge-success">aktif</span>
+                        @else
+                            <span class="badge badge-danger">tidak aktif</span>
+                        @endif
+                    </td>
                     <td class="d-flex justify-content-center gap-2">
                         {{-- onclick : menjalankan fungsi javascript ketika komponen di klik --}}
                         <button class="btn btn-secondary" onclick="showModal({{ $item }})">Detail</button>
@@ -34,7 +45,10 @@
                         </form>
                         {{-- jika activated true, munculkan opsi untuk non-aktif film --}}
                         @if ($item['activated'] == 1)
-                            <a href="" class="btn btn-warning">Non-aktif</a>
+                            <a href="{{ route('admin.movies.non-activated', $item['id']) }}"
+                                class="btn btn-warning">Non-aktif</a>
+                        @else
+                            {{-- none --}}
                         @endif
                     </td>
                 </tr>

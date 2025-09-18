@@ -167,8 +167,30 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Movie $movie)
+    public function destroy($id)
     {
         //
+    }
+
+    public function home()
+    {
+        // where ('field', 'value') -> mencari data
+        // get() -> mengambil semua data dari hasil filter
+        $movies = Movie::where('activated', 1)->get();
+        return view('home', compact('movies'));
+    }
+
+    public function nonActivated($id)
+    {
+        // Non-aktifkan film
+        $updateDataFilm = Movie::where('id', $id)->update([
+            'activated' => 0
+        ]);
+
+        if ($updateDataFilm) {
+            return redirect()->route('admin.movies.index')->with('success', 'Berhasil menon-aktifkan film');
+        } else {
+            return redirect()->back()->with('error', 'Gagal! silahkan coba lagi');
+        }
     }
 }

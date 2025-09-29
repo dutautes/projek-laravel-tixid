@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PromoExport;
 
 class PromoController extends Controller
 {
@@ -124,5 +126,13 @@ class PromoController extends Controller
         } else {
             return redirect()->back()->with('error', 'Data promo gagal di non-aktifkan');
         }
+    }
+
+    public function export()
+    {
+        // nama file
+        $fileName = 'data-promo.xlsx';
+        // proses unduh
+        return Excel::download(new PromoExport, $fileName);
     }
 }

@@ -6,12 +6,14 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () { // home
-    return view('home');
-})->name('home');
+
+// Beranda
+Route::get('/', [MovieController::class, 'home'])->name('home');
+// Semua data film home
+Route::get('/home/movies', [MovieController::class, 'homeAllMovies'])->name('home.movies');
+
 // memberi nama untuk route agar bisa dipanggiil
 // path : kebab, name : snake
-
 // route - controller - model - view : memerlukan data
 // route - view : tanpa data
 
@@ -36,8 +38,6 @@ Route::middleware('isGuest')->group(function () {
 //logout
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-// Beranda
-Route::get('/', [MovieController::class, 'home'])->name('home');
 
 // http method Route::
 // 1. get -> menampilkan halmaman
@@ -72,6 +72,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::put('/update/{id}', [CinemaController::class, 'update'])->name('update');
         // route delete
         Route::delete('/delete/{id}', [CinemaController::class, 'destroy'])->name('delete');
+        // route export
+        Route::get('/export', [CinemaController::class, 'export'])->name('export');
     });
 
     // data pengguna
@@ -91,6 +93,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
         // route delete
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+        // route export
+        Route::get('/export', [UserController::class, 'export'])->name('export');
     });
 
     // data movie
@@ -109,6 +113,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::get('/non-activated/{id}', [MovieController::class, 'nonActivated'])->name('non-activated');
         // delete
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
+        // export
+        Route::get('/export', [MovieController::class, 'export'])->name('export');
     });
 });
 
@@ -133,5 +139,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::delete('/delete/{id}', [PromoController::class, 'destroy'])->name('delete');
         // non-activated
         Route::get('/non-activated/{id}', [PromoController::class, 'nonActivated'])->name('non-activated');
+        // route export
+        Route::get('/export', [PromoController::class, 'export'])->name('export');
     });
 });

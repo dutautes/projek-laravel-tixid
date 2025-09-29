@@ -12,11 +12,11 @@
     @endif
     <div class="container mt-3">
         <div class="d-flex justify-content-end mb-3 mt-4">
+            <a href="{{ route('admin.staffs.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
             <a href="{{ route('admin.staffs.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5>Data Pengguna</h5>
         <table class="table my-3 table-bordered">
-
             <tr>
                 <th></th>
                 <th>Nama </th>

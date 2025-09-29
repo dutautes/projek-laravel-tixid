@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\UserExport;
+use Maatwebsite\Excel\Facades\Excel; // class laravel excel
 
 class UserController extends Controller
 {
@@ -204,5 +206,13 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect()->route('home')->with('logout', 'Berhasil logout! silahkan login kembali untuk akses lengkap');
+    }
+
+    public function export()
+    {
+        // nama file
+        $fileName = 'data-pengguna.xlsx';
+        // proses unduh
+        return Excel::download(new UserExport, $fileName);
     }
 }

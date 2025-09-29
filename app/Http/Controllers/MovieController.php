@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel; // class laravel excel
+use App\Exports\MovieExport;
+use PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
 
 class MovieController extends Controller
 {
@@ -189,8 +192,16 @@ class MovieController extends Controller
     {
         // where ('field', 'value') -> mencari data
         // get() -> mengambil semua data dari hasil filter
-        $movies = Movie::where('activated', 1)->get();
+        // mengurutkan -> orderBy('field', 'ASC/DESC') : ASC (a-z, 0-9, terlama-terbaru), DESC (z-a, 9-0, terbaru-terlama)
+        // limit(angka) -> mengambil sejumlah yg ditentukan
+        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->limit(4)->get();
         return view('home', compact('movies'));
+    }
+
+    public function homeAllMovies()
+    {
+        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->get();
+        return view('home_movies', compact('movies'));
     }
 
     public function nonActivated($id)
@@ -211,5 +222,14 @@ class MovieController extends Controller
     {
         $movie = Movie::findOrFail($id);
         return view('schedule.detail-film', compact('movie'));
+    }
+
+    public function export()
+    {
+        // nama file yg akan diunduh
+        // xlsx / csv
+        $fileName = 'data-film.xlsx';
+        // proses unduh
+        return Excel::download(new MovieExport, $fileName);
     }
 }

@@ -206,4 +206,10 @@ class MovieController extends Controller
             return redirect()->back()->with('error', 'Gagal! silahkan coba lagi');
         }
     }
+
+    public function detail($id)
+    {
+        $movie = Movie::findOrFail($id);
+        return view('schedule.detail-film', compact('movie'));
+    }
 }

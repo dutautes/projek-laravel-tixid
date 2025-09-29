@@ -89,7 +89,7 @@
                 {{-- !important : memprioritaskan, jika ada style padding dr bootstrap akan dibaca yang di style (diutamakan)  --}}
                 <div class="card-body p-2" style="padding:0 !important ">
                     <p class="card-text text-center bg-primary py-2">
-                        <a href="{{ route('schedules.detail') }}" class="text-warning"><b>Beli Tiket</b></a>
+                        <a href="{{ route('schedule.detail', $movie->id) }}" class="text-warning"><b>Beli Tiket</b></a>
                     </p>
                 </div>
             </div>

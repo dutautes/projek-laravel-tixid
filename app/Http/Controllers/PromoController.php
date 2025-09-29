@@ -77,10 +77,12 @@ class PromoController extends Controller
     {
         $request->validate([
             'discount' => 'required',
-            'type' => 'required'
+            'type' => 'required',
+            'activated' => 'required'
         ], [
             'discount.required' => 'Diskon harus diisi',
-            'type.required' => 'Tipe diskon harus diisi'
+            'type.required' => 'Tipe diskon harus diisi',
+            'activated.required' => 'Harus di pilih'
         ]);
         $promoCode = Str::random(8);
 
@@ -88,7 +90,7 @@ class PromoController extends Controller
             'promo_code' => $promoCode,
             'discount' => $request->discount,
             'type' => $request->type,
-            'activated' => 1,
+            'activated' => $request->activated,
         ]);
 
         if ($updateData) {

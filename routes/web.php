@@ -15,9 +15,8 @@ Route::get('/', function () { // home
 // route - controller - model - view : memerlukan data
 // route - view : tanpa data
 
-Route::get('/schedules', function () { // schedule
-    return view('schedule.detail-film');
-})->name('schedules.detail');
+// detail - schedule
+Route::get('/detail/{id}', [MovieController::class, 'detail'])->name('schedule.detail');
 
 Route::middleware('isGuest')->group(function () {
     // Authentication

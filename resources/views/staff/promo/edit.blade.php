@@ -38,11 +38,22 @@
             <div class="mb-3">
                 <label for="type" class="form-label">Tipe Diskon</label>
                 <select class="form-select" name="type" id="type" aria-label="Default select example">
-                    <option selected value=" " hidden>Pilih Jenis Diskon</option>
+                    <option selected value="{{ old('type') }}" hidden>Pilih Jenis Diskon</option>
                     <option value="rupiah">Rupiah</option>
                     <option value="percent">Persen</option>
                 </select>
                 @error('type')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="activated" class="form-label">Status</label>
+                <select name="activated" id="activated" class="form-select">
+                    <option value="" hidden selected>Status Diskon</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">Non-aktif</option>
+                </select>
+                @error('activated')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>

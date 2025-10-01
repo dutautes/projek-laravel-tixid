@@ -6,7 +6,7 @@
             {{-- Poster + Detail Film --}}
             <div class="d-flex">
                 <div style="width: 150px; height: 200px;">
-                    <img src="{{ asset('storage/' . $movie->poster) }}" alt="Demon Slayer" class="w-100 rounded">
+                    <img src="{{ asset('storage/' . $movie->poster) }}" alt="{{ $movie->title }}" class="w-100 rounded">
                 </div>
                 <div class="ms-5 mt-4">
                     <h5 class="fw-bold">{{ $movie->title }}</h5>
@@ -30,6 +30,16 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <ul class="nav nav-underline">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Sinopsis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Jadwal</a>
+                </li>
+            </ul>
         </div>
     </div>
 @endsection

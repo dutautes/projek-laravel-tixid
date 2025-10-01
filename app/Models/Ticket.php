@@ -19,4 +19,14 @@ class Ticket extends Model
         'activated',
         'date'
     ];
+
+    // relasi user id
+
+
+    // relasi schedule id
+
+
+    // relasi promo id
+
+
 }

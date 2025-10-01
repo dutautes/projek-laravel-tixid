@@ -194,7 +194,7 @@ class MovieController extends Controller
         // get() -> mengambil semua data dari hasil filter
         // mengurutkan -> orderBy('field', 'ASC/DESC') : ASC (a-z, 0-9, terlama-terbaru), DESC (z-a, 9-0, terbaru-terlama)
         // limit(angka) -> mengambil sejumlah yg ditentukan
-        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->limit(4)->get();
+        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->limit(3)->get();
         return view('home', compact('movies'));
     }
 
@@ -202,6 +202,13 @@ class MovieController extends Controller
     {
         $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->get();
         return view('home_movies', compact('movies'));
+    }
+
+    public function movieSchedules($movie_id)
+    {
+        // ambil data film beserta schedule dan bioskop pada schedule
+        $movie = Movie::where('id', $movie_id)->with(['schedules', 'schedules.cinema'])->first();
+        return view('schedule.detail-film', compact('movie'));
     }
 
     public function nonActivated($id)
@@ -216,12 +223,6 @@ class MovieController extends Controller
         } else {
             return redirect()->back()->with('error', 'Gagal! silahkan coba lagi');
         }
-    }
-
-    public function detail($id)
-    {
-        $movie = Movie::findOrFail($id);
-        return view('schedule.detail-film', compact('movie'));
     }
 
     public function export()

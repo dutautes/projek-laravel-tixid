@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,7 +19,7 @@ Route::get('/home/movies', [MovieController::class, 'homeAllMovies'])->name('hom
 // route - view : tanpa data
 
 // detail - schedule
-Route::get('/detail/{id}', [MovieController::class, 'detail'])->name('schedule.detail');
+Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedules'])->name('schedule.detail');
 
 Route::middleware('isGuest')->group(function () {
     // Authentication
@@ -50,6 +51,8 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 // name('admin.') : biar diawali dengan admin. untuk name nya. pake titik karna nanti akan digabungkan (admin.dashboard / admin.cinemas)
 // middleware('isAdmin') : memanggil middleware yg akan digunakan
 // middleware : Authorization, pengaturan hak akses pengguna
+
+// DATA MASTER - ADMIN
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', function () {
@@ -141,5 +144,10 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::get('/non-activated/{id}', [PromoController::class, 'nonActivated'])->name('non-activated');
         // route export
         Route::get('/export', [PromoController::class, 'export'])->name('export');
+    });
+
+    Route::prefix('/schedules')->name('schedules.')->group(function () {
+        Route::get('/', [ScheduleController::class, 'index'])->name('index');
+        Route::post('/store', [ScheduleController::class, 'store'])->name('store');
     });
 });

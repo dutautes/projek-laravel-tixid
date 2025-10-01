@@ -6,7 +6,7 @@
         <div class="mt-3 d-flex justify-content-center flex-wrap container gap-3">
             @foreach ($movies as $movie)
                 <div class="card shadow-sm" style="width: 15rem;">
-                    <img src="{{ asset('storage/' . $movie['poster']) }}" alt="{{ $movie['title'] }}"
+                    <img src="{{ asset('storage/' . $movie['poster']) }}" alt="{{ $movie['title'] }}";
                         style="height: 300px; abject-fit: cover;" />
                     {{-- !important : memprioritaskan, jika ada style padding dr bootstrap akan dibaca yang di style (diutamakan)  --}}
                     <div class="card-body text-center p-2" style="padding:0 !important ">

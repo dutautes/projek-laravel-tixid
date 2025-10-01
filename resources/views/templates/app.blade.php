@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -64,7 +64,7 @@
                             <a href="{{ route('staff.dashboard') }}" class="nav-link">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Jadwal Tiket</a>
+                            <a class="nav-link" href="{{ route('staff.schedules.index') }}">Jadwal Tiket</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('staff.promos.index') }}">Promo</a>

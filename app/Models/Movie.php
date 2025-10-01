@@ -19,4 +19,9 @@ class Movie extends Model
         'poster',
         'activated'
     ];
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

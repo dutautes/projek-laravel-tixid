@@ -15,4 +15,26 @@ class Schedule extends Model
         'price',
         'hours'
     ];
+
+    // memanggil relasi cinema. schedule mempunyai FK cinema
+    // karna one (cinema) to many (schedule) : nama tunggal
+    public function cinema()
+    {
+        // untuk table yg memegang FK gunakan ini
+        return $this->belongsTo(Cinema::class);
+    }
+
+    // same thing with cinema
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
+
+    // casts : memastikan tipe data. agar json menjadi array
+    protected function casts(): array
+    {
+        return [
+            'hours' => 'array'
+        ];
+    }
 }

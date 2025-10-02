@@ -20,7 +20,7 @@
             <div class="mb-3">
                 <label for="movie_id" class="col-form-label">Film:</label>
                 <input type="text" name="movie_id" class="form-control" disabled id="movie_id"
-                    value="{{ $schedule['movie']['title'] }} disabled">
+                    value="{{ $schedule['movie']['title'] }}">
             </div>
             {{-- price --}}
             <div class="mb-3">

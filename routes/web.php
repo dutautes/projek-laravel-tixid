@@ -154,5 +154,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::get('/edit/{id}', [ScheduleController::class, 'edit'])->name('edit');
         // update
         Route::patch('/update/{id}', [ScheduleController::class, 'update'])->name('update');
+        // delete
+        Route::delete('/delete/{id}', [ScheduleController::class, 'destroy'])->name('delete');
     });
 });

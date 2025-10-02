@@ -5,6 +5,7 @@
         <form method="POST" action="{{ route('staff.schedules.update', $schedule['id']) }}">
             @csrf
             @method('PATCH')
+            {{-- cinema --}}
             <div class="mb-3">
                 <label for="cinema_id" class="col-form-label">Bioskop:</label>
                 {{-- dibuat disabled agar tidak dapat diubah --}}
@@ -15,11 +16,13 @@
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
+            {{-- movie --}}
             <div class="mb-3">
                 <label for="movie_id" class="col-form-label">Film:</label>
                 <input type="text" name="movie_id" class="form-control" disabled id="movie_id"
                     value="{{ $schedule['movie']['title'] }} disabled">
             </div>
+            {{-- price --}}
             <div class="mb-3">
                 <label for="price" class="form-label">Harga:</label>
                 <input type="number" name="price" id="price"
@@ -28,16 +31,24 @@
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
+            {{-- jam tayang --}}
             <div class="mb-3">
                 <label for="hours" class="form-label">Jam Tayang</label>
-                @foreach ($schedule['hours'] as $hours)
+                @foreach ($schedule['hours'] as $index => $hours)
                     <div class="d-flex align-content-center hour-item">
-                        <input type="time" name="hours[]" id="hours"
-                            class="form-control @if ($errors->has('hours.*')) is-invalid @endif">
-                        <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.5rem; cursor: pointer;"
-                            onclick="this.closest('.hour-item').remove()"></i>
+                        <input type="time" name="hours[]" id="hours" class="form-control my-2"
+                            value="{{ $hours }}">
+                        {{-- this.closest() : mencari element dengan class hour-item yang paling dekat dari element yang di klik, kemudian remove() : hapus --}}
+                        @if ($index > 0)
+                            <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.5rem; cursor: pointer;"
+                                onclick="this.closest('.hour-item').remove()"></i>
+                        @endif
                     </div>
                 @endforeach
+                {{-- wadah buat content JS --}}
+                <div id="additionalInput"></div>
+                <span class="text-primary mt-2" style="cursor: pointer" onclick="addInput()">+ Tambah
+                    Jam</span>
                 {{-- karna hours array, err validasi diambil dengan : --}}
                 {{-- $errors->has() : jika dari err validasi ada err item hours --}}
                 @if ($errors->has('hours.*'))
@@ -49,3 +60,16 @@
         </form>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        function addInput() {
+            let content = `
+            <div class="d-flex align-content-center hour-additional">
+                <input type="time" name="hours[]" id="hours" class="form-control my-2">
+                <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.5rem; cursor: pointer;" onclick="this.closest('.hour-additional').remove()"></i>
+            </div>`;
+            document.querySelector("#additionalInput").innerHTML += content;
+        }
+    </script>
+@endpush

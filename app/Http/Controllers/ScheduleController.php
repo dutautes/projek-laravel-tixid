@@ -105,9 +105,29 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Schedule $schedule)
+    public function update(Request $request, Schedule $schedule, $id)
     {
-        //
+        $request->validate([
+            'price' => 'required|numeric',
+            // karena hours array, jd yg divalidasi itemnya -> 'hours.*'
+            'hours.*' => 'required|date_format:H:i'
+        ], [
+            'price.required' => 'Harga harus diisi.',
+            'price.numeric' => 'Harga harus berupa angka.',
+            'hours.*.required' => 'Jam harus diisi minimal satu data jam.',
+            'hours.*.date_format' => 'Format jam tidak valid. Gunakan format jam:menit.',
+        ]);
+
+        $updateData = Schedule::where('id', $id)->update([
+            'price' => $request->price,
+            'hours' => $request->hours
+        ]);
+
+        if ($updateData) {
+            return redirect()->route('staff.schedules.index')->with('success', 'Berhasil mengubah data!');
+        } else {
+            return redirect()->back()->with('error', 'Jadwal gagal diubah.');
+        }
     }
 
     /**

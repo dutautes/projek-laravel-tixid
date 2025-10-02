@@ -194,7 +194,7 @@ class MovieController extends Controller
         // get() -> mengambil semua data dari hasil filter
         // mengurutkan -> orderBy('field', 'ASC/DESC') : ASC (a-z, 0-9, terlama-terbaru), DESC (z-a, 9-0, terbaru-terlama)
         // limit(angka) -> mengambil sejumlah yg ditentukan
-        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->limit(3)->get();
+        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->limit(4)->get();
         return view('home', compact('movies'));
     }
 

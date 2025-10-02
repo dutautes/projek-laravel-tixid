@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -23,9 +23,9 @@
         <!-- Container wrapper -->
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="https://mdbgo.com/">
-                <img src="https://asset.tix.id/wp-content/uploads/2022/05/TIXID_app_icon.png" height="16"
-                    alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
+            <a class="navbar-brand me-2" href="{{ route('home') }}">
+                <img src="https://asset.tix.id/wp-content/uploads/2021/10/TIXID_logo_blue-300x82.png" height="16"
+                    alt="TIXID Logo" loading="lazy" style="margin-top: -1px;" />
             </a>
 
             <!-- Toggle button -->

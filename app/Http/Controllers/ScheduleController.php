@@ -95,9 +95,11 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Schedule $schedule)
+    public function edit(Schedule $schedule, $id)
     {
-        //
+        $schedule = Schedule::where('id', $id)->with(['cinema', 'movie'])->first();
+
+        return view('staff.schedule.edit', compact('schedule'));
     }
 
     /**

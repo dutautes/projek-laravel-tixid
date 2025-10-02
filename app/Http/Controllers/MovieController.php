@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Schedule;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel; // class laravel excel
@@ -172,6 +173,11 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
+        $schedules = Schedule::where('movie_id', $id)->count();
+        if ($schedules) {
+            return redirect()->route('admin.movies.index')->with('failed', 'Tidak dapat menghapus data bioskop! Data tertaut dengan jadwal tayang');
+        }
+
         $movie = Movie::find($id);
         if ($movie && $movie->poster) {
             $filePath = storage_path('/app/public/' . $movie['poster']);
@@ -213,6 +219,7 @@ class MovieController extends Controller
 
     public function nonActivated($id)
     {
+
         // Non-aktifkan film
         $updateDataFilm = Movie::where('id', $id)->update([
             'activated' => 0

@@ -148,7 +148,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
 
     Route::prefix('/schedules')->name('schedules.')->group(function () {
         Route::get('/', [ScheduleController::class, 'index'])->name('index');
-        // store
+        // store\
         Route::post('/store', [ScheduleController::class, 'store'])->name('store');
         // edit
         Route::get('/edit/{id}', [ScheduleController::class, 'edit'])->name('edit');
@@ -156,5 +156,11 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::patch('/update/{id}', [ScheduleController::class, 'update'])->name('update');
         // delete
         Route::delete('/delete/{id}', [ScheduleController::class, 'destroy'])->name('delete');
+        // trash
+        Route::get('/trash', [ScheduleController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [ScheduleController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [ScheduleController::class, 'deletePermanent'])->name('delete_permanent');
     });
 });

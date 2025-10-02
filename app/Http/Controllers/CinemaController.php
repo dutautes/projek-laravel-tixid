@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cinema;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
+
 
 class CinemaController extends Controller
 {
@@ -111,6 +113,11 @@ class CinemaController extends Controller
      */
     public function destroy($id)
     {
+        $schedules = Schedule::where('cinema_id', $id)->count();
+        if ($schedules) {
+            return redirect()->route('admin.cinemas.index')->with('failed', 'Tidak dapat menghapus data bioskop! Data tertaut dengan jadwal tayang');
+        }
+
         $deleteData = Cinema::where('id', $id)->delete();
         if ($deleteData) {
             return redirect()->route('admin.cinemas.index')->with('success', 'Berhasil menghapus data bioskop!');

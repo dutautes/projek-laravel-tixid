@@ -4,6 +4,7 @@
     <div class="container my-5">
         <div class="d-flex justify-content-end">
             {{-- modal add dimunculkan dengan bootstrap karena tidak memerlukan data dinamsi di modal --}}
+            <a href="{{ route('staff.schedules.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</button>
         </div>
         @if (Session::get('success'))

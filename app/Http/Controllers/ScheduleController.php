@@ -138,4 +138,28 @@ class ScheduleController extends Controller
         Schedule::where('id', $id)->delete();
         return redirect()->route('staff.schedules.index')->with('success', 'Berhasil menghapus data!');
     }
+
+    public function trash()
+    {
+        // ORM yang digunakan terkait sodfdeletes
+        // onlyTrashed() -> filter data yang sudah dihapus, delete_at BUKAN NULL
+        // restore() -> mengembalikan data yang sudah dihapus (menghapus nilai tanggal pada deleted_at)
+        // forceDelete() -> menghapus data secara permanen, data dihilangkan bahkan dari databasenya
+        $scheduleTrash = Schedule::with(['cinema', 'movie'])->onlyTrashed()->get();
+        return view('staff.schedule.trash', compact('scheduleTrash'));
+    }
+
+    public function restore($id)
+    {
+        $schedule = Schedule::onlyTrashed()->find($id);
+        $schedule->restore();
+        return redirect()->route('staff.schedules.index')->with('success', 'Berhasil mengembalikan data!');
+    }
+
+    public function deletePermanent($id)
+    {
+        $schedule = Schedule::onlyTrashed()->find($id);
+        $schedule->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
 }

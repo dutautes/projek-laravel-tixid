@@ -215,4 +215,24 @@ class UserController extends Controller
         // proses unduh
         return Excel::download(new UserExport, $fileName);
     }
+
+    public function trash()
+    {
+        $staffTrash = User::onlyTrashed()->get();
+        return view('admin.staff.trash', compact('staffTrash'));
+    }
+
+    public function restore($id)
+    {
+        $staff = User::onlyTrashed()->find($id);
+        $staff->restore();
+        return redirect()->route('admin.staffs.index')->with('success', 'Berhasil mengembalikan data!');
+    }
+
+    public function deletePermanent($id)
+    {
+        $staff = User::onlyTrashed()->find($id);
+        $staff->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
 }

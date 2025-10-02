@@ -6,6 +6,7 @@
             <div class="alert alert-success">{{ Session::get('success') }}</div>
         @endif
         <div class="d-flex justify-content-end">
+            <a href="{{ route('staff.promos.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>
             <a href="{{ route('staff.promos.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
             <a href="{{ route('staff.promos.create') }}" class="btn btn-success">Tambah Data</a>
         </div>

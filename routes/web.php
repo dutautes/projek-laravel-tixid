@@ -77,6 +77,12 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::delete('/delete/{id}', [CinemaController::class, 'destroy'])->name('delete');
         // route export
         Route::get('/export', [CinemaController::class, 'export'])->name('export');
+        // trash
+        Route::get('/trash', [CinemaController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [CinemaController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [CinemaController::class, 'deletePermanent'])->name('delete_permanent');
     });
 
     // data pengguna
@@ -98,6 +104,12 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
         // route export
         Route::get('/export', [UserController::class, 'export'])->name('export');
+        // trash
+        Route::get('/trash', [UserController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [UserController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
     });
 
     // data movie
@@ -118,6 +130,12 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('delete');
         // export
         Route::get('/export', [MovieController::class, 'export'])->name('export');
+        // trash
+        Route::get('/trash', [MovieController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [MovieController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [MovieController::class, 'deletePermanent'])->name('delete_permanent');
     });
 });
 
@@ -144,6 +162,12 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::get('/non-activated/{id}', [PromoController::class, 'nonActivated'])->name('non-activated');
         // route export
         Route::get('/export', [PromoController::class, 'export'])->name('export');
+        // trash
+        Route::get('/trash', [PromoController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [PromoController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [PromoController::class, 'deletePermanent'])->name('delete_permanent');
     });
 
     Route::prefix('/schedules')->name('schedules.')->group(function () {

@@ -135,4 +135,24 @@ class PromoController extends Controller
         // proses unduh
         return Excel::download(new PromoExport, $fileName);
     }
+
+    public function trash()
+    {
+        $promoTrash = Promo::onlyTrashed()->get();
+        return view('staff.promo.trash', compact('promoTrash'));
+    }
+
+    public function restore($id)
+    {
+        $promo = Promo::onlyTrashed()->find($id);
+        $promo->restore();
+        return redirect()->route('staff.promos.index')->with('success', 'Berhasil mengembalikan data!');
+    }
+
+    public function deletePermanent($id)
+    {
+        $promo = Promo::onlyTrashed()->find($id);
+        $promo->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
 }

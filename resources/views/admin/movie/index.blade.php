@@ -9,6 +9,7 @@
             <div class="alert alert-danger">{{ Session::get('failed') }}</div>
         @endif
         <div class="d-flex justify-content-end">
+            <a href="{{ route('admin.movies.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>
             <a href="{{ route('admin.movies.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
             <a href="{{ route('admin.movies.create') }}" class="btn btn-success">Tambah Data</a>
         </div>

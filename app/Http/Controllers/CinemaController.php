@@ -131,4 +131,24 @@ class CinemaController extends Controller
         $fileName = 'data-cinema.xlsx';
         return Excel::download(new CinemaExport, $fileName);
     }
+
+    public function trash()
+    {
+        $cinemaTrash = Cinema::onlyTrashed()->get();
+        return view('admin.cinema.trash', compact('cinemaTrash'));
+    }
+
+    public function restore($id)
+    {
+        $cinema = Cinema::onlyTrashed()->find($id);
+        $cinema->restore();
+        return redirect()->route('admin.cinemas.index')->with('success', 'Berhasil mengembalikan data!');
+    }
+
+    public function deletePermanent($id)
+    {
+        $cinema = Cinema::onlyTrashed()->find($id);
+        $cinema->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
 }

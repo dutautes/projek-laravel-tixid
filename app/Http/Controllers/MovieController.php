@@ -240,4 +240,24 @@ class MovieController extends Controller
         // proses unduh
         return Excel::download(new MovieExport, $fileName);
     }
+
+    public function trash()
+    {
+        $movieTrash = Movie::onlyTrashed()->get();
+        return view('admin.movie.trash', compact('movieTrash'));
+    }
+
+    public function restore($id)
+    {
+        $movie = Movie::onlyTrashed()->find($id);
+        $movie->restore();
+        return redirect()->route('admin.movies.index')->with('success', 'Berhasil mengembalikan data!');
+    }
+
+    public function deletePermanent($id)
+    {
+        $movie = Movie::onlyTrashed()->find($id);
+        $movie->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
 }

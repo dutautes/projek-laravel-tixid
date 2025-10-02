@@ -1,22 +1,14 @@
 @extends('templates.app')
 
 @section('content')
-    @if (Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show alert-top-right" role="alert">
-            {{ Session::get('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container mt-5">
+        @if (Session::get('success'))
+            <div class="alert alert-success w-100 mt-3">{{ Session::get('success') }}</div>
+        @endif
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('admin.staffs.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
-    @endif
-    @if (Session::get('failed'))
-        <div class="alert alert-danger my-3">{{ Session::get('failed') }}</div>
-    @endif
-    <div class="container mt-3">
-        <div class="d-flex justify-content-end mb-3 mt-4">
-            <a href="{{ route('admin.staffs.trash') }}" class="btn btn-secondary me-2">Data Sampah</a>
-            <a href="{{ route('admin.staffs.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
-            <a href="{{ route('admin.staffs.create') }}" class="btn btn-success">Tambah Data</a>
-        </div>
-        <h5>Data Pengguna</h5>
+        <h5>Data Sampah Pengguna</h5>
         <table class="table my-3 table-bordered">
             <tr>
                 <th>#</th>
@@ -26,7 +18,7 @@
                 <th>Aksi</th>
             </tr>
             {{-- looping : mengubah aray multidimensi menjadi array asosiatif --}}
-            @foreach ($staffs as $key => $staff)
+            @foreach ($staffTrash as $key => $staff)
                 <tr>
                     <td class="text-center">{{ $key + 1 }}</td>
                     <td>{{ $staff['name'] }}</td>
@@ -47,11 +39,17 @@
                         </td>
                     @endif
                     <td class="d-flex justify-content-center gap-2">
-                        <a href="{{ route('admin.staffs.edit', $staff['id']) }}" class="btn btn-info">Edit</a>
-                        <form action="{{ route('admin.staffs.delete', $staff['id']) }}" method="POST">
+                        <form action="{{ route('admin.staffs.restore', $staff['id']) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-success me-2">Kembalikan</button>
+                        </form>
+                        <form action="{{ route('admin.staffs.delete_permanent', $staff['id']) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger">Hapus</button>
+                            <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Anda yakin menghapus file ini secara permanen?')">Hapus
+                                Permanen</button>
                         </form>
                     </td>
                 </tr>

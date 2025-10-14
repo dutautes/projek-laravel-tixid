@@ -2,6 +2,18 @@
 
 @section('content')
     <div class="container my-5">
+        {{-- search --}}
+        <form action="" method="GET"> {{-- form search menggunakan method="get" karna formnya manggil data bukan nyimpen data, actionnya kosong untuk diarahkan ke proses yang sama (tetap disini) --}}
+            @csrf
+            <div class="row">
+                <div class="col-10">
+                    <input type="text" name="search_movie" placeholder="Cari judul film..." class="form-control">
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+        </form>
         {{-- card film --}}
         <div class="mt-3 d-flex justify-content-center flex-wrap container gap-3">
             @foreach ($movies as $movie)

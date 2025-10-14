@@ -204,16 +204,39 @@ class MovieController extends Controller
         return view('home', compact('movies'));
     }
 
-    public function homeAllMovies()
+    public function homeAllMovies(Request $request)
     {
-        $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->get();
+        // ambil value input search name="search_movie"
+        $title = $request->search_movie;
+        // cek jika input search ada isinya, maka cari data
+        if ($title != "") {
+            // LIKE : mencari data yang mengandung kata tertentu
+            // % depan : mencari kata belakang, % belakang : mencari kata depan, % depan belakang : mencari kata di depan dan belakang
+            $movies = Movie::where('title', 'LIKE', '%' . $title . '%')->where('activated', 1)->orderBy('created_at', 'DESC')->get();
+        } else {
+            $movies = Movie::where('activated', 1)->orderBy('created_at', 'DESC')->get();
+        }
+
         return view('home_movies', compact('movies'));
     }
 
-    public function movieSchedules($movie_id)
+    public function movieSchedules($movie_id, Request $request)
     {
+        // ambil data dari href="?price=ASC" tanda tanya
+        $priceSort = $request->price;
+        if ($priceSort) {
+            // karna price adanya di schedules bukan movie, jadi urukan datanya dari schedules (relasi)
+            $movie = Movie::where('id', $movie_id)->with(['schedules' => function ($q) use ($priceSort) {
+                // 'schedules' => function ($q) {...} : melakukan filter pada relasi
+                // $q yang mewakillkan model Schedule
+                $q->orderBy('price', $priceSort);
+            }, 'schedules.cinema'])->first();
+        } else {
+            $movie = Movie::where('id', $movie_id)->with(['schedules', 'schedules.cinema'])->first();
+        }
         // ambil data film beserta schedule dan bioskop pada schedule
-        $movie = Movie::where('id', $movie_id)->with(['schedules', 'schedules.cinema'])->first();
+        // 'schedules.cinema' -> karna relasi cinea adnya di schedules bukan movie
+        // first() :
         return view('schedule.detail-film', compact('movie'));
     }
 

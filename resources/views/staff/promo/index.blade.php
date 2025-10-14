@@ -33,7 +33,7 @@
                             <span class="badge badge-danger">tidak aktif</span>
                         @endif
                     </td>
-                    <td class="d-flex justify-content-center gap-2">
+                    <td class="d-flex justify-content-start gap-2">
                         <a href="{{ route('staff.promos.edit', $item->id) }}" class="btn btn-primary">Edit</a>
                         <form action="{{ route('staff.promos.delete', $item->id) }}" method="post">
                             @csrf

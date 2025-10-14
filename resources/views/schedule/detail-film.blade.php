@@ -32,40 +32,74 @@
             </div>
         </div>
         <div class="d-flex justify-content-center flex-column align-items-center">
+            @php
+                // request()->get('price') : mengambil request, mengambil href="?"
+                if (request()->get('price')) {
+                    // digunakan untuk mengaktifkan tab jadwal jika ada sortir/request price
+                    $activeTab = true;
+                    // kalau sudah pernah sortir price dan typenya ASC ubah jadi DESC
+                    if (request()->get('price') == 'ASC') {
+                        $typePrice = 'DESC';
+                    } else {
+                        // kalau sebelumnya bukan ASC (berarti DESC), type sortir jadi ASC
+                        $typePrice = 'ASC';
+                    }
+                } else {
+                    $activeTab = false;
+                    // kalau belum pernah sortir (belum ada ?price=) berarti type nya ASC
+                    $typePrice = 'ASC';
+                }
+            @endphp
             <ul class="nav nav-underline">
                 <li class="nav-item">
-                    <button class="nav-link active" aria-current="page" data-bs-toggle="tab"
-                        data-bs-target="#sinopsis-tab-pane">Sinopsis</button>
+                    <button class="nav-link {{ $activeTab == false ? 'active' : '' }}" aria-current="page"
+                        data-bs-toggle="tab" data-bs-target="#sinopsis-tab-pane">Sinopsis</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link"data-bs-toggle="tab" data-bs-target="#jadwal-tab-pane">Jadwal</button>
+                    <button class="nav-link {{ $activeTab == true ? 'active' : '' }}" data-bs-toggle="tab"
+                        data-bs-target="#jadwal-tab-pane">Jadwal</button>
                 </li>
             </ul>
             {{-- tab-content --}}
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="sinopsis-tab-pane" role="tabpanel" aria-labelledby="home-tab"
-                    tabindex="0">
+                {{-- kalau $activeTab nya false munculin tab sinopsis --}}
+                <div class="tab-pane fade {{ $activeTab == false ? 'show active' : '' }}" id="sinopsis-tab-pane"
+                    role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                    {{-- Dropdown --}}
                     <div class="mt-3 w-75 d-block mx-auto" style="text-align: justify">
                         {{ $movie['description'] }}
                     </div>
                 </div>
-                <div class="tab-pane fade" id="jadwal-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                    tabindex="0">
+                {{-- kalau $activeTab nya true munculin tab jadwal --}}
+                <div class="tab-pane fade {{ $activeTab == true ? 'show active' : '' }}" id="jadwal-tab-pane"
+                    role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                    {{-- dropdown --}}
+                    <div class="dropdown my-3 w-100">
+                        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
+                            data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+                            Sortir
+                        </button>
+                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                            {{-- ? di href untuk mengirim data ke route GET. mengirim data price dengan isi ASC ke route ini --}}
+                            <li><a class="dropdown-item" href="?price={{ $typePrice }}">Harga</a></li>
+                            <li><a class="dropdown-item" href="#">Alfabet</a></li>
+                        </ul>
+                    </div>
                     {{-- ambil schedules dari relasi movie --}}
+
                     @foreach ($movie['schedules'] as $schedule)
-                        <div class="p-2">
-                            <div class="w-100 d-flex align-items-center gap-2z">
-                                {{-- ambil nama cinema dari relasi schedule --}}
-                                <i class="fa-solid fa-building"></i> <b>{{ $schedule['cinema']['name'] }}</b>
-                            </div>
-                            <small class="ms-3">{{ $schedule['cinema']['location'] }}</small>
-                            <br>
-                            <div class="d-flex flex-wrap">
-                                {{-- looping hours dari schedule --}}
-                                @foreach ($schedule['hours'] as $hours)
-                                    <button class="btn btn-outline-secondary me-2">{{ $hours }}</button>
-                                @endforeach
-                            </div>
+                        <div class="w-100 p-2 d-flex justify-content-between gap-5">
+                            {{-- ambil nama cinema dari relasi schedule --}}
+                            <div><i class="fa-solid fa-building"></i> <b>{{ $schedule['cinema']['name'] }}</b></div>
+
+                            <div>Rp. {{ number_format($schedule['price'], 0, ',', '.') }}</div>
+                        </div>
+                        <br>
+                        <div class="d-flex flex-wrap">
+                            {{-- looping hours dari schedule --}}
+                            @foreach ($schedule['hours'] as $hours)
+                                <button class="btn btn-outline-secondary me-2">{{ $hours }}</button>
+                            @endforeach
                         </div>
                         <hr>
                     @endforeach

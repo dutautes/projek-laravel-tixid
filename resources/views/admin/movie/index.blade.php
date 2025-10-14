@@ -14,7 +14,7 @@
             <a href="{{ route('admin.movies.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5 class="mt-3">Data Film</h5>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="moviesTable">
             <tr>
                 <th>#</th>
                 <th>Poster</th>
@@ -109,5 +109,44 @@
             new bootstrap.Modal(document.querySelector("#modalDetail")).show()
 
         }
+
+        $(function() {
+            $('#moviesTable').DataTable({
+                processing: true,
+                // data untuk datatable diproses secara serverside (controller)
+                serverSide: true,
+                // routing menuju fungsi yang memproses data untuk datatable
+                ajax: "{{ route('admin.movies.datatables') }}",
+                // urutan column (td), pastikan urutan sesuai th
+                // data: 'nama' -> nama diambil dari rawColumn jika addColumns, atau field dari model fillable
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'poster_img',
+                        name: 'poster_img',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'activated_badge',
+                        name: 'activated_badge',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            })
+        })
     </script>
 @endpush

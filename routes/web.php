@@ -136,6 +136,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::patch('/restore/{id}', [MovieController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [MovieController::class, 'deletePermanent'])->name('delete_permanent');
+        // datatables
+        Route::get('datatables', [MovieController::class, 'datatables'])->name('datatables');
     });
 });
 

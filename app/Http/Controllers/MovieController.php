@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel; // class laravel excel
 use App\Exports\MovieExport;
 use PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
 
 class MovieController extends Controller
 {
@@ -255,6 +256,7 @@ class MovieController extends Controller
         }
     }
 
+    // eksport to excel
     public function export()
     {
         // nama file yg akan diunduh
@@ -264,12 +266,14 @@ class MovieController extends Controller
         return Excel::download(new MovieExport, $fileName);
     }
 
+    // data sampah
     public function trash()
     {
         $movieTrash = Movie::onlyTrashed()->get();
         return view('admin.movie.trash', compact('movieTrash'));
     }
 
+    // restore
     public function restore($id)
     {
         $movie = Movie::onlyTrashed()->find($id);
@@ -277,10 +281,49 @@ class MovieController extends Controller
         return redirect()->route('admin.movies.index')->with('success', 'Berhasil mengembalikan data!');
     }
 
+    // delete permanen
     public function deletePermanent($id)
     {
         $movie = Movie::onlyTrashed()->find($id);
         $movie->forceDelete();
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
+
+    // datatables
+    public function datatables()
+    {
+        $movies = Movie::query();
+        return DataTables::of($movies)
+            ->addIndexColumn()
+            ->addColumn('poster_img', function ($item) {
+                $url = asset('storage/' . $item->poster);
+                return '<img src="' . $url . '" width="70">';
+            })
+            ->addColumn('activated_badge', function ($item) {
+                if ($item->activated) {
+                    return '<span class="badge badge-success">Aktif</span>';
+                } else {
+                    return '<span class="badge badge-danger">Non-Aktif</span>';
+                }
+            })
+            ->addColumn('action', function ($item) {
+                $btnDetail = '<button type="button" class="btn btn-secondary" onclick=\'showModal(' . json_encode($item) . ')\'>Detail</button>';
+                $btnEdit = '<a href="' . route('admin.movies.edit', $item->id) . '" class="btn btn-primary">Edit</a>';
+                $btnDelete = '<form action="' . route('admin.movies.delete', $item->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                          </form>';
+                $btnNonAktif = '';
+                if ($item->activated) {
+                    $btnNonAktif = '<form action="' . route('admin.movies.non-activated', $item->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('PATCH') . '
+                            <button type="submit" class="btn btn-warning">Non-Aktif</button>
+                          </form>';
+                }
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnDetail . $btnEdit . $btnDelete . $btnNonAktif . '</div>';
+            })
+            ->rawColumns(['poster_img', 'activated_badge', 'action'])
+            ->make(true);
     }
 }

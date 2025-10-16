@@ -83,6 +83,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::patch('/restore/{id}', [CinemaController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [CinemaController::class, 'deletePermanent'])->name('delete_permanent');
+        // datatables
+        Route::get('datatables', [CinemaController::class, 'datatables'])->name('datatables');
     });
 
     // data pengguna
@@ -110,6 +112,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::patch('/restore/{id}', [UserController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
+        // datatables
+        Route::get('datatables', [UserController::class, 'datatables'])->name('datatables');
     });
 
     // data movie
@@ -170,6 +174,8 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::patch('/restore/{id}', [PromoController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [PromoController::class, 'deletePermanent'])->name('delete_permanent');
+        // datatables
+        Route::get('datatables', [PromoController::class, 'datatables'])->name('datatables');
     });
 
     Route::prefix('/schedules')->name('schedules.')->group(function () {
@@ -188,5 +194,7 @@ Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function (
         Route::patch('/restore/{id}', [ScheduleController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [ScheduleController::class, 'deletePermanent'])->name('delete_permanent');
+        // datatables
+        Route::get('datatables', [ScheduleController::class, 'datatables'])->name('datatables');
     });
 });

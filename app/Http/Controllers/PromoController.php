@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PromoExport;
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
 
 class PromoController extends Controller
 {
@@ -154,5 +155,30 @@ class PromoController extends Controller
         $promo = Promo::onlyTrashed()->find($id);
         $promo->forceDelete();
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
+
+    public function datatables()
+    {
+        $promos = Promo::query();
+        return DataTables::of($promos)
+            ->addIndexColumn()
+            ->addColumn('status_badge', function ($item) {
+                if ($item->activated == 1) {
+                    return '<span class="badge badge-success">Aktif</span>';
+                } else {
+                    return '<span class="badge badge-danger">Tidak</span>';
+                }
+            })
+            ->addColumn('action', function ($item) {
+                $btnEdit = '<a href="' . route('staff.promos.edit', $item->id) . '" class="btn btn-primary">Edit</a>';
+                $btnDelete = '<form action="' . route('staff.promos.delete', $item->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                          </form>';
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnEdit . $btnDelete . '</div>';
+            })
+            ->rawColumns(['status_badge', 'action'])
+            ->make(true);
     }
 }

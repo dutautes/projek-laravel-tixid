@@ -20,7 +20,7 @@
             <a href="{{ route('admin.cinemas.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5>Data Bioskop</h5>
-        <table class="table my-3 table-bordered">
+        <table class="table my-3 table-bordered" id="cinemasTable">
 
             <tr>
                 <th></th>
@@ -48,3 +48,35 @@
 
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+            $('#cinemasTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.cinemas.datatables') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'location',
+                        name: 'location'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+
+            })
+        })
+    </script>
+@endpush

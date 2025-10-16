@@ -17,7 +17,7 @@
             <a href="{{ route('admin.staffs.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5>Data Pengguna</h5>
-        <table class="table my-3 table-bordered">
+        <table class="table my-3 table-bordered" id="staffsTable">
             <tr>
                 <th>#</th>
                 <th>Nama </th>
@@ -59,3 +59,40 @@
         </table>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+            $('#staffsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.staffs.datatables') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'role_badge',
+                        name: 'role_badge',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            })
+        })
+    </script>
+@endpush

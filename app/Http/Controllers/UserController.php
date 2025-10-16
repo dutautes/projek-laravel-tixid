@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel; // class laravel excel
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
 
 class UserController extends Controller
 {
@@ -234,5 +235,32 @@ class UserController extends Controller
         $staff = User::onlyTrashed()->find($id);
         $staff->forceDelete();
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
+
+    public function datatables()
+    {
+        $staffs = User::query();
+        return DataTables::of($staffs)
+            ->addIndexColumn()
+            ->addColumn('role_badge', function ($staff) {
+                if ($staff['role'] == 'admin') {
+                    return '<span class="badge bg-primary">' . $staff['role'] . '</span>';
+                } elseif ($staff['role'] == 'staff') {
+                    return '<span class="badge bg-success">' . $staff['role'] . '</span>';
+                } else {
+                    return '<span class="badge bg-secondary">' . $staff['role'] . '</span>';
+                }
+            })
+            ->addColumn('action', function ($staff) {
+                $btnEdit = '<a href="' . route('admin.staffs.edit', $staff->id) . '" class="btn btn-primary">Edit</a>';
+                $btnDelete = '<form action="' . route('admin.staffs.delete', $staff->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                          </form>';
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnEdit . $btnDelete . '</div>';
+            })
+            ->rawColumns(['action', 'role_badge'])
+            ->make(true);
     }
 }

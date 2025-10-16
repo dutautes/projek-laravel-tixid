@@ -7,7 +7,7 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
-
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
 
 class CinemaController extends Controller
 {
@@ -150,5 +150,23 @@ class CinemaController extends Controller
         $cinema = Cinema::onlyTrashed()->find($id);
         $cinema->forceDelete();
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
+
+    public function datatables()
+    {
+        $cinemas = Cinema::query();
+        return DataTables::of($cinemas)
+            ->addIndexColumn()
+            ->addColumn('action', function ($cinema) {
+                $btnEdit = '<a href="' . route('admin.cinemas.edit', $cinema->id) . '" class="btn btn-info">Edit</a>';
+                $btnDelete = '<form action="' . route('admin.cinemas.delete', $cinema->id) . '" method="POST">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button class="btn btn-danger">Hapus</button>
+                        </form>';
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnEdit . $btnDelete . '</div>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }

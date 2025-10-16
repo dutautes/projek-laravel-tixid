@@ -11,7 +11,7 @@
             <div class="alert alert-success w-100 mt-3">{{ Session::get('success') }}</div>
         @endif
         <h3 class="my-3">Data Jadwal Tayang</h3>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="schedulesTable">
             <tr>
                 <th>#</th>
                 <th>Bioskop</th>
@@ -133,6 +133,46 @@
             // karna nanti akan selalu bertambah, agar yg sebelumnya tidak hilang gunakan : +=
             wrap.innerHTML += content;
         }
+        // datatables
+        $(function() {
+            $('#schedulesTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('staff.schedules.datatables') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'cinema.name',
+                        name: 'cinema.name'
+                    },
+                    {
+                        data: 'movie.title',
+                        name: 'movie.title'
+                    },
+                    {
+                        data: 'price',
+                        name: 'price'
+                    },
+                    {
+                        data: 'hours_lists',
+                        name: 'hours',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+
+                ]
+            })
+        })
     </script>
     {{-- pengecekan php, kalo ada error validasi apapun : $errors->any() --}}
     @if ($errors->any())

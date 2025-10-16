@@ -11,7 +11,7 @@
             <a href="{{ route('staff.promos.create') }}" class="btn btn-success">Tambah Data</a>
         </div>
         <h5>Data Promo</h5>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="promosTable">
             <tr>
                 <th>No</th>
                 <th>Kode Promo</th>
@@ -53,3 +53,44 @@
         </table>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(function() {
+            $('#promosTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('staff.promos.datatables') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'promo_code',
+                        name: 'promo_code'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'status_badge',
+                        name: 'status_badge',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    }
+                ]
+            })
+        })
+    </script>
+@endpush

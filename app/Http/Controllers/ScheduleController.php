@@ -6,6 +6,7 @@ use App\Models\Schedule;
 use App\Models\Cinema;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra " datatables
 
 class ScheduleController extends Controller
 {
@@ -161,5 +162,35 @@ class ScheduleController extends Controller
         $schedule = Schedule::onlyTrashed()->find($id);
         $schedule->forceDelete();
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
+    }
+
+    public function datatables()
+    {
+        $schedules = Schedule::with(['cinema', 'movie']);
+        return DataTables::of($schedules)
+            ->addIndexColumn()
+            ->addColumn('price', function ($schedule) {
+                return 'Rp. ' . number_format($schedule['price'], 0, ',', '.');
+            })
+            ->addColumn('hours_lists', function ($schedule) {
+                $html = '<ul>';
+                foreach ($schedule['hours'] as $hour) {
+                    $html .= '<li>' . $hour . '</li>';
+                }
+                $html .= '</ul>';
+
+                return $html;
+            })
+            ->addColumn('action', function ($schedule) {
+                $btnEdit = '<a href="' . route('staff.schedules.edit', $schedule->id) . '" class="btn btn-primary">Edit</a>';
+                $btnDelete = '<form action="' . route('staff.schedules.delete', $schedule->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                          </form>';
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnEdit . $btnDelete . '</div>';
+            })
+            ->rawColumns(['action', 'hours_lists'])
+            ->make(true);
     }
 }

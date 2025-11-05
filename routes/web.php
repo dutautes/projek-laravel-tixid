@@ -5,21 +5,24 @@ use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
-
-
-// Beranda
-Route::get('/', [MovieController::class, 'home'])->name('home');
-// Semua data film home
-Route::get('/home/movies', [MovieController::class, 'homeAllMovies'])->name('home.movies');
 
 // memberi nama untuk route agar bisa dipanggiil
 // path : kebab, name : snake
 // route - controller - model - view : memerlukan data
 // route - view : tanpa data
 
+// Beranda
+Route::get('/', [MovieController::class, 'home'])->name('home');
+// Semua data film home
+Route::get('/home/movies', [MovieController::class, 'homeAllMovies'])->name('home.movies');
+
 // detail - schedule
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedules'])->name('schedule.detail');
+
+// halaman pilihan kursi
+Route::get('/schedules/{scheduleId}/hours/{hourId}/show-seats', [TicketController::class, 'showSeats'])->name('schedules.seats');
 
 Route::middleware('isGuest')->group(function () {
     // Authentication
@@ -68,6 +71,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
             return view('admin.cinema.create');
         })->name('create');
 
+        // create
         Route::post('/store', [CinemaController::class, 'store'])->name('store');
         // route edit
         Route::get('/edit/{id}', [CinemaController::class, 'edit'])->name('edit');

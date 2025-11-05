@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    // show seats
+    public function showSeats($scheduleId, $hourId)
+    {
+        // dd($scheduleId, $hourId);
+        $schedule = Schedule::where('id', $scheduleId)->with('cinema')->first();
+        // jika tidak ada data jam kasi default nilai kosong
+        $hour = $schedule['hours'][$hourId] ?? '-';
+        return view('schedule.show-seats', compact('schedule', 'hour'));
+    }
+
     /**
      * Display a listing of the resource.
      */

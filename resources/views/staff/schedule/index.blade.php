@@ -47,6 +47,7 @@
                 </tr>
             @endforeach
         </table>
+
         {{-- modal --}}
         <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAddLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -95,7 +96,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3">q
                                 <label for="hours" class="form-label">Jam Tayang</label>
                                 <br>
                                 {{-- karna hours array, err validasi diambil dengan : --}}

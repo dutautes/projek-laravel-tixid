@@ -24,7 +24,7 @@
         <!-- Container wrapper -->
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="{{ route('home') }}">
+            <a class="navbar-brand me-4" href="{{ route('home') }}">
                 <img src="https://asset.tix.id/wp-content/uploads/2021/10/TIXID_logo_blue-300x82.png" height="16"
                     alt="TIXID Logo" loading="lazy" style="margin-top: -1px;" />
             </a>

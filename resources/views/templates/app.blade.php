@@ -75,7 +75,7 @@
                             <a class="nav-link" href="{{ route('home') }}">Beranda</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Bioskop</a>
+                            <a class="nav-link" href="{{ route('cinemas.list') }}">Bioskop</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Tiket</a>
@@ -104,7 +104,12 @@
         <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
-
+    @if (Session::get('accessDenied'))
+        <div class="alert alert-danger alert-dismissible fade show alert-top-right" role="alert">
+            {{ Session::get('accessDenied') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     {{-- menyimpan konten dinamis bagian HTML --}}
     @yield('content')
 

@@ -13,16 +13,38 @@ use Illuminate\Support\Facades\Route;
 // route - controller - model - view : memerlukan data
 // route - view : tanpa data
 
+// http method Route::
+// 1. get -> menampilkan halmaman
+// 2. post -> mengambil data/menambahkan data
+// 3. patch/put -> mengubah data
+// 4. delete -> menghapus data
+
+// prefix() : awalan, menulis /admin satu kali untuk 16 route CRUD (beberapa route)
+// name('admin.') : biar diawali dengan admin. untuk name nya. pake titik karna nanti akan digabungkan (admin.dashboard / admin.cinemas)
+// middleware('isAdmin') : memanggil middleware yg akan digunakan
+// middleware : Authorization, pengaturan hak akses pengguna
+
+//logout
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
 // Beranda
 Route::get('/', [MovieController::class, 'home'])->name('home');
+
 // Semua data film home
 Route::get('/home/movies', [MovieController::class, 'homeAllMovies'])->name('home.movies');
 
 // detail - schedule
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedules'])->name('schedule.detail');
 
-// halaman pilihan kursi
-Route::get('/schedules/{scheduleId}/hours/{hourId}/show-seats', [TicketController::class, 'showSeats'])->name('schedules.seats');
+// menu "bioskop" pada navbar user (pengguna umum)
+Route::get('/cinemas/list', [CinemaController::class, 'cinemaList'])->name('cinemas.list');
+Route::get('/cinemas/{ciname_id}/schedules', [CinemaController::class, 'cinemaSchedules'])->name('cinemas.schedules');
+
+// middleware isUser
+Route::middleware('isUser')->group(function () {
+    // halaman pilihan kursi
+    Route::get('/schedules/{scheduleId}/hours/{hourId}/show-seats', [TicketController::class, 'showSeats'])->name('schedules.seats');
+});
 
 Route::middleware('isGuest')->group(function () {
     // Authentication
@@ -39,23 +61,7 @@ Route::middleware('isGuest')->group(function () {
     Route::post('/sign-up', [UserController::class, 'signUp'])->name('sign_up.add');
 });
 
-//logout
-Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-
-
-// http method Route::
-// 1. get -> menampilkan halmaman
-// 2. post -> mengambil data/menambahkan data
-// 3. patch/put -> mengubah data
-// 4. delete -> menghapus data
-
-
-// prefix() : awalan, menulis /admin satu kali untuk 16 route CRUD (beberapa route)
-// name('admin.') : biar diawali dengan admin. untuk name nya. pake titik karna nanti akan digabungkan (admin.dashboard / admin.cinemas)
-// middleware('isAdmin') : memanggil middleware yg akan digunakan
-// middleware : Authorization, pengaturan hak akses pengguna
-
-// DATA MASTER - ADMIN
+// middleware isAdmin - Datamaster
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', function () {
@@ -149,7 +155,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
     });
 });
 
-// middleware staff
+// middleware isStaff
 Route::middleware('isStaff')->prefix('/staff')->name('staff.')->group(function () {
     Route::get('/dashboard', function () {
         return view('staff.dashboard');

@@ -17,8 +17,15 @@ class Ticket extends Model
         'quantity',
         'total_price',
         'activated',
-        'date'
+        'date',
+        'hours'
     ];
+
+    protected function casts(): array
+    {
+        return ['rows_of_seats' => 'array'];
+    }
+
 
     // relasi user id
 
@@ -27,6 +34,4 @@ class Ticket extends Model
 
 
     // relasi promo id
-
-
 }

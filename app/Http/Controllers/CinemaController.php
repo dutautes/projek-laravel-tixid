@@ -169,4 +169,20 @@ class CinemaController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function cinemaList()
+    {
+        $cinemas = Cinema::all();
+        return view('schedule.cinemas', compact('cinemas'));
+    }
+
+    public function cinemaSchedules($cinema_id)
+    {
+        // whereHas('namaRelasi', function($q) {.....} : argumen 1 (nama relasi) wajib, argumen 2 (func untuk filter pada relasi) opsional)
+        // whereHas('namaRelasi') -> Movie::whereHas('schedules') mengambil data film hanya yang memiliki relasi (memiliki data) schedules
+        $schedules = Schedule::where('cinema_id', $cinema_id)->with('movie')->whereHas('movie', function ($q) {
+            $q->where('activated', 1);
+        })->get();
+        return view('schedule.cinema-schedules', compact('schedules'));
+    }
 }

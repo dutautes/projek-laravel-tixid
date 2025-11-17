@@ -96,7 +96,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <div class="mb-3">q
+                            <div class="mb-3">
                                 <label for="hours" class="form-label">Jam Tayang</label>
                                 <br>
                                 {{-- karna hours array, err validasi diambil dengan : --}}

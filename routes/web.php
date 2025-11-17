@@ -44,6 +44,11 @@ Route::get('/cinemas/{ciname_id}/schedules', [CinemaController::class, 'cinemaSc
 Route::middleware('isUser')->group(function () {
     // halaman pilihan kursi
     Route::get('/schedules/{scheduleId}/hours/{hourId}/show-seats', [TicketController::class, 'showSeats'])->name('schedules.seats');
+
+    Route::prefix('/tickets')->name('tickets.')->group(function () {
+        Route::post('/', [TicketController::class, 'store'])->name('store');
+        Route::get('/{ticketId}/order', [TicketController::class, 'ticketOrder'])->name('order');
+    });
 });
 
 Route::middleware('isGuest')->group(function () {

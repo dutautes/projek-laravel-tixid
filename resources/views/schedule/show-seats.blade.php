@@ -62,7 +62,12 @@
                 <h5 id="seats">belum dipilih</h5>
             </div>
         </div>
-        <div class="text-center p-2"><b>RINGKASAN ORDER</b></div>
+        {{-- input hidden yang disembunyikan hanya untuk menyimpan nilai yang diperlukan JS untuk proses tambah data ticket --}}
+        <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
+        <input type="hidden" name="schedule_id" id="schedule_id" value="{{ $schedule->id }}">
+        <input type="hidden" name="hours" id="hours" value="{{ $hour }}">
+
+        <div class="text-center p-2 w-100" style="cursor: pointer" id="btnOrder"><b>RINGKASAN ORDER</b></div>
     </div>
 @endsection
 
@@ -70,6 +75,7 @@
     <script>
         // menyimpan data kursi yang dipilih
         let seats = [];
+        let totalPrice = 0;
 
         function selectedSeats(price, baris, nomorKursi, element) {
             // buat A-1
@@ -90,11 +96,53 @@
             let totalPriceElement = document.querySelector("#totalPrice");
             let seatsElement = document.querySelector("#seats");
             // hitung harga dari parameter dikali jumlah kursi yang dipilih
-            let totalPrice = price * (seats.length); // length : menghitung jumlah item array
+            totalPrice = price * (seats.length); // length : menghitung jumlah item array
             // simpan harga di element html
             totalPriceElement.innerText = "Rp. " + totalPrice;
             // join(', ') : mengubah array menjadi string dipisahkan dengan tanda tertentu
             seatsElement.innerText = seats.join(", ");
+
+            let btnOrder = document.querySelector("#btnOrder");
+            // seats array isinya lebih dar sama dengan satu, aktifin btn ordder
+            if (seats.length >= 1) {
+                btnOrder.style.background = '#112646';
+                btnOrder.style.color = 'white';
+                // buat agar ketika di klik mengarah ke proses createTicket
+                btnOrder.onclick = createTicket;
+            } else {
+                btnOrder.style.background = '';
+                btnOrder.style.color = '';
+                btnOrder.onclick = null;
+            }
+        }
+
+        function createTicket() {
+            // AJAX (asynchronus javascript and XML) : proses mengambil/menambahkan data dari/ke database. hanya bisa gunakan melalui JQuery (Library yang penulisannya berupa JS modern, gaya penulisan lebih singkat $())
+            $.ajax({
+                url: "{{ route('tickets.store') }}", // route untuk proses data
+                method: "POST", // http method sesuai url
+                data: {
+                    // data yang mau dikirim ke route (kalo di html, input form)
+                    _token: "{{ csrf_token() }}",
+                    user_id: $("#user_id").val(), // value="" dr input id="user_id"
+                    schedule_id: $("#schedule_id").val(),
+                    hours: $("#hours").val(),
+                    quantity: seats.length, // jumlah item array seats
+                    total_price: totalPrice,
+                    rows_of_seats: seats,
+                    // fillable : value
+                },
+                success: function(response) { // kalau berhasil, mau ngapain. data hasil disimpen di (response)
+                    // console.log(response);
+                    // redirect JS : window.location.href
+                    // response : message & data
+                    let ticketId = response.data.id;
+                    window.location.href = `/tickets/${ticketId}/order`;
+                },
+                error: function(message) { // kalau diservernya ada errro mau ngapain
+                    alert("Terjadi kesalahan ketika membuat data tiket!");
+                }
+            })
         }
     </script>
 @endpush

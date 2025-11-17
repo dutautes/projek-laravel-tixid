@@ -28,10 +28,26 @@ class Ticket extends Model
 
 
     // relasi user id
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // relasi schedule id
-
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
 
     // relasi promo id
+    public function promo()
+    {
+        return $this->belongsTo(Promo::class);
+    }
+
+    // relasi ticket payment
+    public function ticketsPayment()
+    {
+        return $this->hasOne(TicketPayment::class);
+    }
 }

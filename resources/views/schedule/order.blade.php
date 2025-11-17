@@ -89,11 +89,9 @@
 
         function createQR() {
             let data = {
-                _token: "{{ csrf_token }}",
+                _token: "{{ csrf_token() }}",
                 promo_id: promoId,
-                ticket_id: $ {
-                    "#ticket_id"
-                }.val()
+                ticket_id: $("#ticket_id").val()
             }
             $.ajax({
                 url: "{{ route('tickets.payment') }}",

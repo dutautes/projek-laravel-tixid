@@ -12,6 +12,33 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
+    public function chartData()
+    {
+        // ambil data dibulan ini
+        $month = now()->format('m'); // bulan saat ini
+        // ambil data tiket yang sudah dibayar dan dibayar di bulan ini, kemudian kelompokan datanya berdasarkan tanggal pembayaran (groupBy)
+        $tickets = Ticket::whereHas('ticketPayment', function ($q) use ($month) {
+            // whereMonth : mencari berdasarkan bulan
+            $q->whereMonth('paid_date', $month);
+        })->get()->groupBy(function ($ticket) {
+            return \Carbon\Carbon::parse($ticket->ticketPayment->paid_date)->format('Y-m-d');
+        })->toArray();
+        // $tickets berisi ["tanggal" => dataditgltersebut]
+        // pisahkan tanggal untuk labels di chartjs
+        $labels = array_keys($tickets);
+        // hitung isi data di key tanggal tersebut, untuk data di chartjs
+        $data = [];
+        foreach ($tickets as $item) {
+            // simpan hasil count() ke array data
+            array_push($data, count($item));
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
+
     // show seats
     public function showSeats($scheduleId, $hourId)
     {

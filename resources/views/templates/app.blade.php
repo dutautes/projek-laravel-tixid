@@ -126,6 +126,9 @@
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
 
+    {{-- CDN ChartJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     {{-- menyimpan konten dinamis bagian JS --}}
     @stack('script')
 </body>

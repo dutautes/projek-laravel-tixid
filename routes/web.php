@@ -74,6 +74,7 @@ Route::middleware('isGuest')->group(function () {
 
 // middleware isAdmin - Datamaster
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
+    Route::get('/tickets/chart', [TicketController::class, 'chartData'])->name('tickets.chart');
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
@@ -139,6 +140,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
 
     // data movie
     Route::prefix('/movies')->name('movies.')->group(function () {
+        // chart
+        Route::get('/chart', [MovieController::class, 'chartData'])->name('chart');
         // index
         Route::get('/', [MovieController::class, 'index'])->name('index');
         // create

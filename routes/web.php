@@ -52,6 +52,8 @@ Route::middleware('isUser')->group(function () {
         Route::post('/payment', [TicketController::class, 'ticketPayment'])->name('payment');
         // halaman yang menampilkan qrcode
         Route::get('/{ticketId}/payment', [TicketController::class, 'ticketPaymentPage'])->name('payment.page');
+        Route::patch('/{ticketId}/payment/proof', [TicketController::class, 'paymentProof'])->name('payment.proof');
+        Route::get('/{ticketId}/receipt', [TicketController::class, 'ticketReceipt'])->name('receipt');
     });
 });
 

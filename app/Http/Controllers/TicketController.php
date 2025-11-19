@@ -17,9 +17,21 @@ class TicketController extends Controller
     {
         // dd($scheduleId, $hourId);
         $schedule = Schedule::where('id', $scheduleId)->with('cinema')->first();
+
         // jika tidak ada data jam kasi default nilai kosong
         $hour = $schedule['hours'][$hourId] ?? '-';
-        return view('schedule.show-seats', compact('schedule', 'hour'));
+
+        // ambil data kursi di tiket yang sesuai dengan jam, tanggal, dan sudah dibayar
+        $seats = Ticket::whereHas('ticketPayment', function ($q) {
+            // whereDate : mencari berdasarkan tanggal
+            $q->whereDate('paid_date', now()->format('Y-m-d'));
+        })->whereTime('hours', $hour)->pluck('rows_of_seats');
+        // pluck() : mengambil hanya dari 1 field, bedanya dengan value() kalau value() ambil 1 data pertama dari field tersebut, kalau pluck() ambil semua data dari field tersebut
+        $seatsFormat = array_merge(...$seats);
+        // (...) : spread operator : mengeluarkan nilai array
+        // spread operator mengeluarkan nilai array lalu disimpan lg ke 1 dimensi oleh array_merge()
+        // dd($seatsFormat);
+        return view('schedule.show-seats', compact('schedule', 'hour', 'seatsFormat'));
     }
 
     /**
@@ -119,9 +131,31 @@ class TicketController extends Controller
         ]);
     }
 
-    public function ticketPaymentPage()
+    public function ticketPaymentPage($ticketId)
     {
-        //
+        $ticket = Ticket::where('id', $ticketId)->with(['promo', 'ticketPayment', 'schedule'])->first();
+
+        return view('schedule.payment', compact('ticket'));
+    }
+
+    public function paymentProof($ticketId)
+    {
+        $updateData = Ticket::where('id', $ticketId)->update([
+            'activated' => 1,
+        ]);
+        // karna data hanya ada ticket_id jd update payment berdasarkan ticket_id nya
+        $udpatePayment = TicketPayment::where('ticket_id', $ticketId)->update([
+            'paid_date' => now()
+        ]);
+        // karna route receipt perlu ticket_id maka perlu dikirim
+        return redirect()->route('tickets.receipt', $ticketId);
+    }
+
+    public function ticketReceipt($ticketId)
+    {
+        $ticket = Ticket::where('id', $ticketId)->with(['schedule', 'schedule.cinema', 'schedule.movie', 'ticketPayment'])->first();
+
+        return view('schedule.receipt', compact('ticket'));
     }
     /**
      * Display the specified resource.

@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="card w-50 d-block mx-auto my-5 p-4">
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ route('tickets.export_pdf', $ticket['id']) }}" class="btn btn-secondary">Unduh (.pdf)</a>
+        </div>
         <div class="card-body d-flex justify-content-center flex-wrap">
             {{-- looping struk tiket sesuai jumlah kursi --}}
             @foreach ($ticket['rows_of_seats'] as $kursi)

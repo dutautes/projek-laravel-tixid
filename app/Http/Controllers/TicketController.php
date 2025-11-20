@@ -7,8 +7,9 @@ use App\Models\TicketPayment;
 use App\Models\Schedule;
 use App\Models\Promo;
 use Illuminate\Http\Request;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\Facades\QrCode; // buat generate qr code
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf; // import buat laravel dom-pdf
 
 class TicketController extends Controller
 {
@@ -66,7 +67,15 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        $ticketActive = Ticket::whereHas('ticketPayment', function ($q) {
+            $q->whereDate('booked_date', now()->format('Y-m-d'))->where('paid_date', '<>', NULL);
+        })->get();
+        // <> : tidak sama dengan
+        $ticketNonActive = Ticket::whereHas('ticketPayment', function ($q) {
+            $q->whereDate('booked_date', '<', now()->format('Y-m-d'))->where('paid_date', '<>', NULL);
+        })->get();
+
+        return view('ticket.index', compact('ticketActive', 'ticketNonActive'));
     }
 
     /**
@@ -184,6 +193,20 @@ class TicketController extends Controller
 
         return view('schedule.receipt', compact('ticket'));
     }
+
+    public function exportPdf($ticketId)
+    {
+        // siapkan data : data yang dikirim harus berupa array
+        $ticket = Ticket::where('id', $ticketId)->with(['schedule', 'schedule.cinema', 'schedule.movie', 'promo', 'ticketPayment'])->first()->toArray();
+        // buat inisiasi nama data yang nanti akan digunakan pada blade pdf
+        view()->share('ticket', $ticket);
+        // generate file blade yang akan dicetak pdf
+        $pdf = Pdf::loadView('schedule.export-pdf', $ticket);
+        // untuk pdf dengan nama file tertentu
+        $fileName = 'TICKET' . $ticket['id'] . '.pdf';
+        return $pdf->download($fileName);
+    }
+
     /**
      * Display the specified resource.
      */
